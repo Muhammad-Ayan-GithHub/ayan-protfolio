@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Portfolio</title>
+  <style>
+    body{margin:0;font-family:Arial;background:#0f172a;color:white}
+    section{padding:50px}
+    .projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+    .card{background:#111827;padding:20px;border-radius:15px}
+    img{width:100%;border-radius:10px}
+    a{color:#38bdf8;text-decoration:none}
+  </style>
+</head>
+<body>
+
+<section>
+  <h1>About Me</h1>
+  <p>I build modern websites and creative projects.</p>
+</section>
+
+<section>
+  <h1>Projects</h1>
+  <div class="projects" id="projects"></div>
+</section>
+
+<section>
+  <h1>Contact</h1>
+  <p>Email: your@email.com</p>
+</section>
+
+<script type="module">
+import { supabase } from './config.js';
+
+const box = document.getElementById("projects");
+
+const { data } = await supabase
+  .from("projects")
+  .select("*")
+  .order("created_at",{ascending:false});
+
+data.forEach(p=>{
+  box.innerHTML+=`
+    <div class="card">
+      <img src="${p.image_url}">
+      <h3>${p.title}</h3>
+      <p>${p.description}</p>
+      <a href="${p.project_link}" target="_blank">View Project</a>
+    </div>
+  `;
+});
+</script>
+
+</body>
+</html>
