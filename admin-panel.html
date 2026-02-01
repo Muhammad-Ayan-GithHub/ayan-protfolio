@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head><title>Admin Panel</title></head>
+<body>
+
+<h2>Add New Project</h2>
+
+<input id="title" placeholder="Project Title"><br><br>
+<textarea id="desc" placeholder="Description"></textarea><br><br>
+<input id="link" placeholder="GitHub / Live Link"><br><br>
+<input id="image" type="file"><br><br>
+<button onclick="upload()">Upload</button>
+
+<script type="module">
+import { supabase } from './config.js';
+
+const { data } = await supabase.auth.getUser();
+if(!data.user) location.href="admin-login.html";
+
+async function upload(){
+  const file=image.files[0];
+  const name=Date.now()+"-"+file.name;
+
+  await supabase.storage.from("project-images").upload(name,file);
+
+  const imgURL=
+  "https://nxastrezgmowxpnptvzj.supabase.co/storage/v1/object/public/project-images/"+name;
+
+  await supabase.from("projects").insert([{
+    title:title.value,
+    description:desc.value,
+    image_url:imgURL,
+    project_link:link.value
+  }]);
+
+  alert("Project Uploaded ✅");
+}
+</script>
+
+</body>
+</html>
