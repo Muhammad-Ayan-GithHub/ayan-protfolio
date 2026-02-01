@@ -4,21 +4,27 @@
 <body>
 
 <h2>Admin Login</h2>
+
 <input id="email" placeholder="Email"><br><br>
 <input id="password" type="password" placeholder="Password"><br><br>
-<button onclick="login()">Login</button>
+
+<button id="btn">Login</button>
 
 <script type="module">
 import { supabase } from './config.js';
 
-async function login(){
-  const { error } = await supabase.auth.signInWithPassword({
+document.getElementById("btn").onclick = async () => {
+  const { data, error } = await supabase.auth.signInWithPassword({
     email: email.value,
     password: password.value
   });
-  if(error) alert(error.message);
-  else location.href="admin-panel.html";
-}
+
+  if (error) {
+    alert(error.message);
+  } else {
+    location.href = "admin-panel.html";
+  }
+};
 </script>
 
 </body>
